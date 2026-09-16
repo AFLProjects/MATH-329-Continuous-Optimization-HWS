@@ -26,4 +26,9 @@ except where requested;
 - Not crash due to numerical issues such as NaN / Inf.
 """
 
-print("Test")
+from scipy.io import loadmat
+data = loadmat('../data/mnist_train_test.mat',
+               squeeze_me=True, struct_as_record=False)
+train, test = data['train'], data['test']
+
+print(train.X[0])
