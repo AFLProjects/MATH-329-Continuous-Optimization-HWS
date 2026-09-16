@@ -1,0 +1,1 @@
+Packages we should install (for Python), time it takes to run main on your machine, and other information as requested in the questions.
