@@ -1,0 +1,6 @@
+alpha,min_f,n_iter,stopping_reason
+0.01,11868945.2595363,236,gradient_tolerance
+0.001,870195.8293035176,238,gradient_tolerance
+0.0001,93439.8498019561,237,gradient_tolerance
+1e-05,7870.307007842742,237,gradient_tolerance
+1e-06,17862.86253957798,518,gradient_tolerance
