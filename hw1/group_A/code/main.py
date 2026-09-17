@@ -79,6 +79,58 @@ def grad_f(theta, data_X = train_X, data_Y = train_Y, l2_reg = l2_reg):
         + (s * data_X) @ dphi(s * (theta @ data_X))
     )
 
+# Question 3
+
+theta_q3 = np.random.randn(d)
+
+v = np.random.randn(d)
+v = v / np.linalg.norm(v)
+
+t_values = np.logspace(-8, 0, 101)
+
+f_theta = f(theta_q3)
+grad_theta = grad_f(theta_q3)
+
+errors = np.array([
+    abs(
+        f(theta_q3 + t * v)
+        - f_theta
+        - t * (v @ grad_theta)
+    )
+    for t in t_values
+])
+
+os.makedirs('../results', exist_ok=True)
+
+# Save numerical values
+with open('../results/q3_gradient_check.csv', 'w', newline='') as csv_file:
+    writer = csv.writer(csv_file)
+    writer.writerow(["t", "error"])
+
+    for t, error in zip(t_values, errors):
+        writer.writerow([t, error])
+
+# Plot
+fig = plt.figure(figsize=(6, 4))
+
+plt.loglog(t_values, errors, label='Taylor error')
+
+# Reference line with slope 2
+reference = errors[-1] * (t_values / t_values[-1])**2
+plt.loglog(t_values, reference, '--', label=r'$O(t^2)$')
+
+plt.xlabel(r'$t$')
+plt.ylabel(
+    r'$|f(\theta+tv)-f(\theta)-t\,v^T\nabla f(\theta)|$'
+)
+plt.title('Gradient check')
+plt.grid(True, which='both')
+plt.legend()
+plt.tight_layout()
+
+plt.savefig('../results/q3_gradient_check.pdf')
+plt.close(fig)
+
 # Question 4
 
 GRAD_TOLERANCE = 1e-3
@@ -184,3 +236,4 @@ fig.suptitle(f'Gradient descent convergence (alpha = {best_alpha:g})')
 fig.tight_layout()
 fig.savefig('../results/q5_convergence.pdf')
 plt.close(fig)
+
