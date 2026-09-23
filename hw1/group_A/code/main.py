@@ -150,7 +150,7 @@ plt.close(fig)
 
 GRAD_TOLERANCE = 1e-3
 
-def run_gradient_descent(theta_0, alpha = 1e-5, time_limit = 3.0 * 60):
+def run_gradient_descent(theta_0, alpha = 1e-4, time_limit = 3.0 * 60):
     theta = theta_0
     grad = grad_f(theta)
 
@@ -176,6 +176,7 @@ def run_gradient_descent(theta_0, alpha = 1e-5, time_limit = 3.0 * 60):
     return theta, values_f, values_grad_f_norm, stopping_reason
 
 theta_0 = np.random.randn(d)
+"""
 print("running grid_search:")
 alpha_grid = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 
@@ -189,20 +190,22 @@ for alpha in alpha_grid:
         "n_iter": len(values_f_a) - 1,
         "stopping_reason": stopping_reason_a,
     }
-
-best_alpha = min(grid_results, key=lambda a: grid_results[a]["min_f"])
+"""
+best_alpha = 1e-4
+#min(grid_results, key=lambda a: grid_results[a]["min_f"])
 theta_final, values_f, values_grad_norm, stopping_reason = run_gradient_descent(
     theta_0, best_alpha
 )
 
 # Grid search results
 
+"""
 print("Grid search over alpha (time budget "
       f"{15*60.0:.0f}s each):")
 for alpha, res in grid_results.items():
     print(f"  alpha={alpha:g}: min f={res['min_f']:.6f}, "
           f"iterations={res['n_iter']}, stopping={res['stopping_reason']}")
-
+"""
 print(f"Selected alpha = {best_alpha:g}")
 print(f"Final run ({3*60.0:.0f}s budget): "
       f"f={values_f[-1]:.6f}, grad_norm={values_grad_norm[-1]:.6e}, "
@@ -219,7 +222,7 @@ with open('../results/q4_run_values.csv', 'w', newline='') as csv_file:
         writer.writerow(
             [k, best_alpha, values_f[k], values_grad_norm[k], stopping_reason]
         )
-
+"""
 with open('../results/q4_grid_search.csv', 'w', newline='') as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(["alpha", "min_f", "n_iter", "stopping_reason"])
@@ -227,7 +230,7 @@ with open('../results/q4_grid_search.csv', 'w', newline='') as csv_file:
         writer.writerow(
             [alpha, res["min_f"], res["n_iter"], res["stopping_reason"]]
         )
-
+"""
 ## plots
 
 iterations = np.arange(len(values_f))
@@ -242,7 +245,7 @@ axes[0].set_ylabel(r'$f(\theta_k)$')
 axes[0].set_title('Objective value')
 
 axes[1].plot(iterations, values_grad_norm)
-axes[0].set_yscale('log')
+axes[1].set_yscale('log')
 axes[1].set_xlabel('Iteration')
 axes[1].set_ylabel(r'$\|\nabla f(\theta_k)\|$')
 axes[1].set_title('Gradient norm')
