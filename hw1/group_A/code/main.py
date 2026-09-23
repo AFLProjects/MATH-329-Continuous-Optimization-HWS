@@ -48,6 +48,8 @@ d, m = train_X.shape # 785, 12665
 
 l2_reg = 5e-3 # regularization
 
+# Question 2
+
 def phi_scalar(z): # z real
     if z <= -1.0:
         return 0.0
@@ -66,6 +68,36 @@ def dphi_scalar(z): # z real
         return 1.0
 dphi = np.vectorize(dphi_scalar)
 
+def f_explicit(theta, data_X = train_X, data_Y = train_Y, l2_reg=l2_reg):
+    loss = 0.0
+    m = data_X.shape[1]
+
+    for i in range(m):
+        x_i = data_X[:, i]        #(785,)
+        y_i = data_Y[i]           # Label (0 o 1)
+        s_i = 1.0 - 2.0 * y_i     # Scale y_i from {0,1} to {1, -1}
+        
+        reg_i = s_i * np.dot(theta, x_i)   # s_i * <θ, x_i>
+        loss += phi_scalar(reg_i)        
+        
+    reg = (l2_reg / 2.0) * np.dot(theta, theta)
+    return reg + loss
+
+def grad_f_explicit(theta, data_X=train_X, data_Y=train_Y, l2_reg=l2_reg):
+    grad = np.zeros_like(theta)
+    m = data_X.shape[1]
+    
+    for i in range(m):
+        x_i = data_X[:, i]        #(785,)
+        y_i = data_Y[i]           # Label (0 o 1)
+        s_i = 1.0 - 2.0 * y_i     # Scale y_i from {0,1} to {1, -1}
+        
+        reg_i = s_i * np.dot(theta, x_i)   # s_i * <θ, x_i>
+        grad += (s_i * dphi_scalar(reg_i)) * x_i
+        
+    grad += l2_reg * theta
+    return grad
+  
 def f(theta, data_X = train_X, data_Y = train_Y, l2_reg = l2_reg):
     return (
         l2_reg/2 * np.sum(theta**2) 
@@ -78,7 +110,9 @@ def grad_f(theta, data_X = train_X, data_Y = train_Y, l2_reg = l2_reg):
         l2_reg * theta
         + (s * data_X) @ dphi(s * (theta @ data_X))
     )
-
+######
+###if you want you can leave these tests but i did them below..
+#####
 X_test = np.array([
     [2.0, 0.5, 1.0],
     [1.0, 1.0, 1.0]
@@ -93,6 +127,37 @@ assert np.allclose(
     grad_f(theta_test, X_test, y_test, lam_test),
     np.array([2.75, 0.5])
 )
+
+#tests
+theta_test = np.random.randn(d)
+
+#check f
+val_vec = f(theta_test)
+val_exp = f_explicit(theta_test)
+
+assert np.isclose(val_vec, val_exp)
+
+#check grad_f
+grad_vec = grad_f(theta_test)
+grad_exp = grad_f_explicit(theta_test)
+
+assert np.allclose(grad_vec, grad_exp)
+
+#time for explicit version
+t0 = time.time()
+f_exp_val = f_explicit(theta_test)
+grad_exp_val = grad_f_explicit(theta_test)
+t_explicit = time.time() - t0
+
+#time for vector form
+t0 = time.time()
+f_vec_val = f(theta_test)
+grad_vec_val = grad_f(theta_test)
+t_vectorized = time.time() - t0
+
+# Results
+print(f"explicit time:    {t_explicit:.4f} seconds")
+print(f"vectorized time:  {t_vectorized:.4f} seconds")
 
 # Question 3
 
