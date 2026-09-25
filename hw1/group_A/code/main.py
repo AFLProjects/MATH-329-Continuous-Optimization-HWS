@@ -57,7 +57,6 @@ def phi_scalar(z): # z real
         return 0.5 * (1.0+z)**2
     else:
         return 0.5 + z
-phi = np.vectorize(phi_scalar)
 
 def dphi_scalar(z): # z real
     if z <= -1.0:
@@ -66,7 +65,16 @@ def dphi_scalar(z): # z real
         return 1.0+z
     else:
         return 1.0
-dphi = np.vectorize(dphi_scalar)
+
+def phi(z):
+    return np.where(
+        z <= -1.0,
+        0.0,
+        np.where(z <= 0.0, 0.5 * (1.0 + z)**2, 0.5 + z)
+    )
+
+def dphi(z):
+    return np.where(z <= -1.0, 0.0, np.where(z <= 0.0, 1.0 + z, 1.0))
 
 def f_explicit(theta, data_X = train_X, data_Y = train_Y, l2_reg=l2_reg):
     loss = 0.0
@@ -303,7 +311,6 @@ iterations = np.arange(len(values_f))
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
  
 axes[0].plot(iterations, values_f)
-axes[0].set_xscale('log')
 axes[0].set_yscale('log')
 axes[0].set_xlabel('Iteration')
 axes[0].set_ylabel(r'$f(\theta_k)$')
@@ -319,3 +326,27 @@ fig.suptitle(f'Gradient descent convergence (alpha = {best_alpha:g})')
 fig.tight_layout()
 fig.savefig('../results/q5_convergence.pdf')
 plt.close(fig)
+
+# Question 7: evaluate the final iterate used for the Question 5 plots.
+# A score of exactly zero predicts label 0.
+train_predictions = (theta_final @ train_X > 0).astype(int)
+test_predictions = (theta_final @ test_X > 0).astype(int)
+train_incorrect = np.count_nonzero(train_predictions != train_Y)
+test_incorrect = np.count_nonzero(test_predictions != test_Y)
+train_error_rate = train_incorrect / train_Y.size
+test_error_rate = test_incorrect / test_Y.size
+
+np.savez(
+    '../results/q7_classification.npz',
+    theta_final=theta_final,
+    train_error_rate=train_error_rate,
+    test_error_rate=test_error_rate,
+    train_incorrect=train_incorrect,
+    test_incorrect=test_incorrect,
+    train_samples=train_Y.size,
+    test_samples=test_Y.size,
+)
+print(f'Training error: {train_incorrect}/{train_Y.size} = '
+      f'{train_error_rate:.8f} ({100 * train_error_rate:.4f}%)')
+print(f'Test error: {test_incorrect}/{test_Y.size} = '
+      f'{test_error_rate:.8f} ({100 * test_error_rate:.4f}%)')
