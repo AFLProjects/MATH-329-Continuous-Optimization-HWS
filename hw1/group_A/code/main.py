@@ -263,13 +263,13 @@ for alpha in alpha_grid:
         theta_0, alpha = alpha, time_limit = 3 * 60.0
     )
     grid_results[alpha] = {
-        "min_f": min(values_f_a),
+        "final_f": values_f_a[-1],
         "n_iter": len(values_f_a) - 1,
         "stopping_reason": stopping_reason_a,
     }
 """
 best_alpha = 1e-4
-# min(grid_results, key=lambda a: grid_results[a]["min_f"])
+# best_alpha = min(grid_results, key=lambda a: grid_results[a]["final_f"])
 theta_final, values_f, values_grad_norm, stopping_reason = run_gradient_descent(
     theta_0, best_alpha
 )
@@ -280,7 +280,7 @@ theta_final, values_f, values_grad_norm, stopping_reason = run_gradient_descent(
 print("Grid search over alpha (time budget "
       f"{3*60.0:.0f}s each):")
 for alpha, res in grid_results.items():
-    print(f"  alpha={alpha:g}: min f={res['min_f']:.6f}, "
+    print(f"  alpha={alpha:g}: final f={res['final_f']:.6f}, "
           f"iterations={res['n_iter']}, stopping={res['stopping_reason']}")
 """
 print(f"Selected alpha = {best_alpha:g}")
@@ -302,13 +302,12 @@ with open('../results/q4_run_values.csv', 'w', newline='') as csv_file:
 """
 with open('../results/q4_grid_search.csv', 'w', newline='') as csv_file:
     writer = csv.writer(csv_file)
-    writer.writerow(["alpha", "min_f", "n_iter", "stopping_reason"])
+    writer.writerow(["alpha", "final_f", "n_iter", "stopping_reason"])
     for alpha, res in grid_results.items():
         writer.writerow(
-            [alpha, res["min_f"], res["n_iter"], res["stopping_reason"]]
+            [alpha, res["final_f"], res["n_iter"], res["stopping_reason"]]
         )
 """
-
 ## Plots q5
 
 iterations = np.arange(len(values_f))

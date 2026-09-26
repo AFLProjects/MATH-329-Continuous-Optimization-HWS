@@ -1,7 +1,7 @@
-alpha,min_f,n_iter,stopping_reason
+alpha,final_f,n_iter,stopping_reason
 0.01,157.34244839691638,154,gradient_tolerance
 0.001,12.91788516214552,197,gradient_tolerance
 0.0001,5.61664811934552,1546,gradient_tolerance
-1e-05,31.492383897131553,9774,time_limit
-1e-06,235.30543256165694,9687,time_limit
-1e-07,1280.0703205741042,9741,time_limit
+1e-05,32.996884167844115,9535,time_limit
+1e-06,239.14436559790485,9434,time_limit
+1e-07,1310.0037339429043,9446,time_limit
