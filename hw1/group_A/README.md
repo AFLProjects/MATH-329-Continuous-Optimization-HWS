@@ -6,7 +6,7 @@ Question 3 saves the gradient-check values in `results/q3_gradient_check.csv`
 and the plot in `results/q3_gradient_check.pdf`. The approximately straight
 part of the log-log plot has slope 2, as expected from the Taylor remainder.
 Question 4 saves the iteration history, including the initial point, in
-`results/q4_run_values.csv`; the selected fixed step size is `0.0001`.
+`results/q4_run_values.csv`; the selected fixed step size is `0.0001`. The grid search for selecting alpha is commented out to stay within the 5-minute runtime limit. The grid search results are included in `results/q4_grid_search.csv`.
 Question 5 plots iteration number on a linear horizontal axis and uses
 logarithmic vertical axes because both quantities span several orders of
 magnitude. The plot is saved in `results/q5_convergence.pdf`.

@@ -1,1 +1,0 @@
-Disclose tool use (which tools and to what end) and influential discussions with other groups.

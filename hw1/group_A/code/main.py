@@ -118,9 +118,9 @@ def grad_f(theta, data_X = train_X, data_Y = train_Y, l2_reg = l2_reg):
         l2_reg * theta
         + (s * data_X) @ dphi(s * (theta @ data_X))
     )
-######
-###if you want you can leave these tests but i did them below..
-#####
+
+# Test vectorized f and grad_f against values computed by hand.
+
 X_test = np.array([
     [2.0, 0.5, 1.0],
     [1.0, 1.0, 1.0]
@@ -136,28 +136,29 @@ assert np.allclose(
     np.array([2.75, 0.5])
 )
 
-#tests
+# Test f and grad_f vectorized against the explicit for-loop implementation.
+
 theta_test = np.random.randn(d)
 
-#check f
+# Check f
 val_vec = f(theta_test)
 val_exp = f_explicit(theta_test)
 
 assert np.isclose(val_vec, val_exp)
 
-#check grad_f
+# Check grad_f
 grad_vec = grad_f(theta_test)
 grad_exp = grad_f_explicit(theta_test)
 
 assert np.allclose(grad_vec, grad_exp)
 
-#time for explicit version
+# Time for explicit version
 t0 = time.time()
 f_exp_val = f_explicit(theta_test)
 grad_exp_val = grad_f_explicit(theta_test)
 t_explicit = time.time() - t0
 
-#time for vector form
+# Time for vector form
 t0 = time.time()
 f_vec_val = f(theta_test)
 grad_vec_val = grad_f(theta_test)
@@ -249,6 +250,9 @@ def run_gradient_descent(theta_0, alpha = 1e-4, time_limit = 3.0 * 60):
     return theta, values_f, values_grad_f_norm, stopping_reason
 
 theta_0 = np.random.randn(d)
+# The grid search for selecting alpha is commented out to stay within 
+# the 5-minute runtime limit. The grid search results are included in
+# ../results/q4_grid_search.csv.
 """
 print("running grid_search:")
 alpha_grid = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
@@ -265,7 +269,7 @@ for alpha in alpha_grid:
     }
 """
 best_alpha = 1e-4
-#min(grid_results, key=lambda a: grid_results[a]["min_f"])
+# min(grid_results, key=lambda a: grid_results[a]["min_f"])
 theta_final, values_f, values_grad_norm, stopping_reason = run_gradient_descent(
     theta_0, best_alpha
 )
@@ -274,7 +278,7 @@ theta_final, values_f, values_grad_norm, stopping_reason = run_gradient_descent(
 
 """
 print("Grid search over alpha (time budget "
-      f"{15*60.0:.0f}s each):")
+      f"{3*60.0:.0f}s each):")
 for alpha, res in grid_results.items():
     print(f"  alpha={alpha:g}: min f={res['min_f']:.6f}, "
           f"iterations={res['n_iter']}, stopping={res['stopping_reason']}")
@@ -304,12 +308,13 @@ with open('../results/q4_grid_search.csv', 'w', newline='') as csv_file:
             [alpha, res["min_f"], res["n_iter"], res["stopping_reason"]]
         )
 """
-## plots
+
+## Plots q5
 
 iterations = np.arange(len(values_f))
- 
+
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
- 
+
 axes[0].plot(iterations, values_f)
 axes[0].set_yscale('log')
 axes[0].set_xlabel('Iteration')
@@ -321,7 +326,7 @@ axes[1].set_yscale('log')
 axes[1].set_xlabel('Iteration')
 axes[1].set_ylabel(r'$\|\nabla f(\theta_k)\|$')
 axes[1].set_title('Gradient norm')
- 
+
 fig.suptitle(f'Gradient descent convergence (alpha = {best_alpha:g})')
 fig.tight_layout()
 fig.savefig('../results/q5_convergence.pdf')
