@@ -322,11 +322,11 @@ We also verified how strongly-convex maps are ideal for optimization problems, s
 
 On the computational side, we learned how vectorization of the code reduces run-time. We also observed that computational checks, although useful for detecting errors, do not constitute a proof of correctness, repeating experiments and comparing numerical statistics can nevertheless provide stronger evidence.
 
-Floating-point effects must also be taken into account when interpreting numerical results. In particular, catastrophic cancellation and finite-precision arithmetic can cause practical computations to deviate from their exact theoretical behavior, as observed in Question 3.
+We also noticed that floating point effects must be taken into account when interpreting numerical results. In particular, catastrophic cancellation can cause practical computations to deviate from their exact theoretical behavior, as observed in Question 3.
 
-Furthermore, step sizes that perform well in practice may differ substantially from conservative values used in theoretical sufficient conditions. Such guarantees are designed to hold generally and may not exploit the particular structure of the data. For image data, for example, correlations between pixels could potentially be exploited through dimensionality reduction, although unsupervised methods such as PCA may discard directions that are important for discriminating between the two classes.
+Furthermore, the step sizes we found performed well in practice differed from the values used in theoretical sufficient conditions. Such guarantees are designed to hold generally and may not exploit the particular structure of the data. For image data, the correlations between pixels could be exploited through dimensionality reduction, although unsupervised methods such as PCA may discard directions that are important for discriminating between the two classes.
 
-Finally, it is important to distinguish training data from validation or test data in order to assess whether the obtained solution generalizes to unseen samples.
+Finally, we learned that it is important to distinguish training data from validation or test data in order to assess whether the obtained solution generalizes to unseen samples.
 
 \end{document}
 
