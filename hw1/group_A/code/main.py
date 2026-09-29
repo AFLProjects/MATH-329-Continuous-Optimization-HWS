@@ -331,6 +331,10 @@ fig.tight_layout()
 fig.savefig('../results/q5_convergence.pdf')
 plt.close(fig)
 
+# Question 6: Lipschitz constant of grad f (L = sigma_max(X)^2 + lambda)
+L = np.linalg.norm(train_X, 2)**2 + l2_reg
+print(f"Q6: L = {L:.4g}, 1/L = {1/L:.3g}, alpha*L = {best_alpha*L:.3g}")
+
 # Question 7: evaluate the final iterate used for the Question 5 plots.
 # A score of exactly zero predicts label 0.
 train_predictions = (theta_final @ train_X > 0).astype(int)
