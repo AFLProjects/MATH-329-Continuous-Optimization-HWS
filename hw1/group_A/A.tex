@@ -113,11 +113,11 @@ $$\phi'(z)=\begin{cases}
 \end{cases};$$
 in particular, $\phi'$ is non-decreasing, whence $\phi$ is convex.
 We have shown that $f_\lambda$ is $\lambda$-strongly convex, whence, by theorem 4.28, $f_\lambda$ admits one and only one point of global minimum.
-The set of global minimizers of a $C^1$ convex function coincides with the set of critical points by corollary 4.23; it follows $f_\lambda$ has exactly one critical point. 
+The set of global minimizers of a $C^1$ convex function coincides with the set of critical points by corollary 4.23; it follows that $f_\lambda$ has exactly one critical point. 
 
 \section*{Question 2}
 For this and the following questions, we  fix $\lambda=0.005$.
-Recall form question 1 that $\phi\in \mathrm C^1(\R)$, whence $\D \phi (z)[v]=\phi'(z)\cdot v$, for each $z,v\in \R$.
+Recall from question 1 that $\phi\in \mathrm C^1(\R)$, whence $\D \phi (z)[v]=\phi'(z)\cdot v$, for each $z,v\in \R$.
 Since the differential operator $\D(\cdot)$ is linear and the differential of a linear map at a fixed point is the linear map itself, we have that
 \begin{align*}
   \D f(\theta)[v] &= \sum_{i=1}^m  \D \left( \phi\circ \inn{s_i\tilde{x_i}}{\cdot} \right)(\theta)[v]\\
@@ -318,7 +318,7 @@ The test error is slightly higher than the training error, but both error rates 
 \section*{Question 8}
 Through this homework, we practiced calculating the gradient of a function using the definition of differential, as opposed to coordinate-based methods such as partial derivatives. We deployed at our advantage the basic properties of the differential, such that it is linear and that it acts identically on linear maps (i.e. $\D f(x)[v]=L(v)$, for any linear map $L$).
 
-We also verified how strongly-convex maps are ideal for optimization problems, since they have exactly one minimizer (global and local), which coincides with the only critical point (cf. Question 1). If the objective function is, moreover, Lipschitz, gradient descent gives an algorithmic way of finding such a minimizer.
+We also verified how strongly-convex maps are ideal for optimization problems, since they have exactly one minimizer (global and local), which coincides with the only critical point (cf. Question 1). If the objective function is, moreover, Lipschitz, gradient descent gives an explicit way of finding such a minimizer, as the limit of an iterative algorithm (namely, gradient descent).
 
 On the computational side, we learned how vectorization of the code reduces run-time. We also observed that computational checks, although useful for detecting errors, do not constitute a proof of correctness, repeating experiments and comparing numerical statistics can nevertheless provide stronger evidence.
 
