@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\parindent=0pt
+\usepackage{nameref}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{systeme}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\theoremstyle{definition}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{claim}{Claim}
+\newtheorem*{definition}{Definition}
+\newtheorem*{example}{Example}
+\newtheorem*{notation}{Notation}
+\newtheorem*{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Nz}{\mathbb{N^*}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\conj}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\tran}{^{\mkern-1.5mu\mathsf{T}}}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Col}{Col}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\Null}{Null}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\m}{m}
+\DeclareMathOperator{\cov}{Cov}
+\DeclareMathOperator{\diam}{\mathrm {diam}}
+\DeclareMathOperator{\cl}{\mathrm {cl}}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\alint}{al\text{-}int}
+\DeclareMathOperator{\aff}{aff}
+\DeclareMathOperator{\co}{co}
+\DeclareMathOperator{\cone}{cone}
+\DeclareMathOperator{\p}{\mathbf p}
+\newcommand\myfunc[5]{
+  \begingroup
+  \setlength\arraycolsep{0pt}
+  #1\colon\begin{array}[t]{c >{{}}c<{{}} c}
+             #2 & \to & #3 \\ #4 & \mapsto & #5 
+          \end{array}%
+  \endgroup}
+\newcommand\PP[2]{P_{\mathcal #2\leftarrow \mathcal #1}}
+\newcommand\M[2]{\mathcal M_{\mathcal #1; \mathcal #2}}
+\newcommand\MM[1]{\mathcal M_{\mathcal #1}}
+\newcommand \norm[1]{\left\lVert #1 \right\rVert}
+\newcommand\inn [2]{\left\langle #1{,}#2\right\rangle}
+\newcommand \unif {\overset{\text{unif}}\longrightarrow}
+\newcommand \pw {\overset{\text{pw}}\longrightarrow}
+\newcommand \as {\overset{\text{a.e.}}\longrightarrow}
+\newcommand \pb {\overset{\text{pb}}\longrightarrow}
+\newcommand \dis {\overset{\text{d}}\longrightarrow}
+\newcommand \utimes {\underline{\times}}
+\newcommand{\dott}{\,\begin{picture}(-1,1)(-1,-3)\circle*{3}\end{picture}\ }
+\newcommand{\e}{\mathrm{e}}
+\newcommand{\D}{\mathrm D}
+\renewcommand{\i}{\mathrm{i}}
+\newcommand{\B}{\mathrm B}
+\renewcommand{\d}{\,\mathrm{d}}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\emptyset}{\varnothing}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{enumitem}
+
+\title{Continuous Optimization: Homework 2 - Group A}
+\author{Edoardo Gargiulo, Matteo Martellini, Marco Bares, Adrian Fluder, Andreas Jean T Caeyman}
+\date{12 November 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1}
+We tested our \texttt{tCG} implementation on the model $m(v)=\tfrac12\langle v,Hv\rangle+\langle g,v\rangle$ in 1-D, 2-D and 3-D, covering the following cases:
+\begin{itemize}
+    \item $g=0$;
+    \item $g\neq 0$ with the solution strictly inside the ball, without triggering the small-residual stopping criterion;
+    \item solution on the boundary of the ball;
+    \item indefinite $H$ (negative curvature);
+    \item termination by the small-residual stopping criterion;
+    \item ill-conditioned $H$, checking that the exact minimizer is recovered when the stopping criterion is not triggered.
+\end{itemize}
+
+\section*{Question 3}
+Define $f\colon \R^n\to \R$ by  $f(x)\coloneq \frac 1{4n}\norm{(Ax)^{\odot 2}-y^{\odot 2}}^2$, where $y$ is a constant vector in $\R^n$.
+As a premilimary step, we compute the derivative of some basic functions that will be useful in what follows.
+Let \(g:\mathbb{R}^n\to\mathbb{R}^n\) be defined by
+\(
+g(x) \coloneq x^{\odot 2}.
+\)
+Fix arbitrary $v\in \R^n$ and let $x\in \R^n$; the directional derivative is
+\[
+\begin{aligned}
+\lim_{t\to 0}\frac{g(x+tv)-g(x)}{t} &= \lim_{t\to 0}\sum_{i=1}^n
+\frac{(x_i+tv_i)^2-x_i^2}{t}\,e_i\\
+&=\sum_{i=1}^n
+\left(\lim_{t\to 0}
+\frac{(x_i+tv_i)^2-x_i^2}{t}\,e_i\right)\\
+&=\sum_{i=1}^n 2x_iv_i\,e_i &&\text{(Derivative of the 1-D square function)}\\
+&= 2 x \odot v.
+\end{aligned}
+\]
+Since this expression is continuous in $x$ and the existence and continuity of directional derivative implies differentiability, we obtain that
+\(
+\D g(x)[v]=\sum_{i=1}^n 3x_i^2v_i\,e_i
+\).
+
+Now define $t\colon \R^n\to \R^n$ by $t(x)\coloneq x^{\odot 3}$. Obvious modifications to the above calucations, this time using the expression for the derivative of the 1-D cube function, yield that $t$ is differentiable with $\D t(x)[v]=3x^{\odot 2}\odot v$, for each $x,v\in \R^n$.
+
+Finally, define $h\colon \R^n\to \R$ by $h(x)=\norm x^2$, and recall that $\D h(x)[v]=\inn{x}{v}$, for each $x,v\in \R^n$.
+
+We end this preliminary part by defining $p\colon \R^n\to \R$ by $p(x)\coloneq y^{\odot 2}\odot x$ and observing that $p$ is linear.
+
+The preliminary calculations, chain rule and the linearity of the differential then imply the differetiability of $f$, whose derivative we compute below. With a slight abuse of notation, we denote by $A$ the linear map $x\mapsto Ax$.
+
+\begin{align*}
+Df(x)[v]
+&= \frac{1}{4n}
+D\left(h\circ(g\circ A-y^{\odot 2})\right)(x)[v]\\
+&= \frac{1}{4n}
+Dh\left((g\circ A-y^{\odot 2})(x)\right)
+\left[D(g\circ A-y^{\odot 2})(x)[v]\right]\\
+&= \frac{1}{4n}
+Dh\left((Ax)^{\odot 2}-y^{\odot 2}\right)
+\left[D(g\circ A)(x)[v]\right]\\
+&= \frac{1}{4n}
+Dh\left((Ax)^{\odot 2}-y^{\odot 2}\right)
+\left[Dg(Ax)[DA(x)[v]]\right]\\
+&= \frac{1}{4n}
+Dh\left((Ax)^{\odot 2}-y^{\odot 2}\right)
+\left[Dg(Ax)[Av]\right]\\
+&= \frac{1}{4n}
+Dh\left((Ax)^{\odot 2}-y^{\odot 2}\right)
+\left[2(Ax)\odot(Av)\right]\\
+&= \frac{1}{2n}
+\left\langle
+(Ax)^{\odot 2}-y^{\odot 2},
+2(Ax)\odot(Av)
+\right\rangle\\
+&= \frac{1}{n}
+\left\langle
+(Ax)^{\odot 2}-y^{\odot 2},
+(Ax)\odot(Av)
+\right\rangle\\
+&= \frac{1}{n}
+\left\langle
+\left((Ax)^{\odot 2}-y^{\odot 2}\right)\odot(Ax),
+Av
+\right\rangle\\
+&= \frac{1}{n}
+\left\langle
+(Ax)^{\odot 3}-y^{\odot 2}\odot(Ax),
+Av
+\right\rangle\\
+&= \frac{1}{n}
+\left\langle
+A^T\left((Ax)^{\odot 3}-y^{\odot 2}\odot(Ax)\right),
+v
+\right\rangle\\
+&=\left\langle
+\frac{1}{n}A^T
+\left((Ax)\odot\left((Ax)^{\odot 2}-y^{\odot 2}\right)\right),
+v
+\right\rangle,
+\end{align*}
+for each $x,v\in \R^n$
+(in the third to last step, we used the identity $\inn{u\odot v}{w}=\inn{u}{v\odot w}$, for arbitrary vectors).\\
+By definition of gradient, we have
+\(
+\nabla f(x)=\frac{1}{n}A^T
+\left((Ax)\odot\left((Ax)^{\odot 2}-y^{\odot 2}\right)\right).
+\)
+
+Once again, chain rule and linearity yield differetiability of $\nabla f$, and we can compute
+\begin{align*}
+D(\nabla f)(x)[v]
+&=\frac{1}{n}A^T
+D(t\circ A-p\circ A)(x)[v]\\
+&=\frac{1}{n}A^T
+\left(D(t\circ A)(x)[v]-D(p\circ A)(x)[v]\right)\\
+&=\frac{1}{n}A^T
+\left(Dt(Ax)[DA(x)[v]]-Dp(Ax)[DA(x)[v]]\right)\\
+&=\frac{1}{n}A^T
+\left(Dt(Ax)[Av]-Dp(Ax)[Av]\right)\\
+&=\frac{1}{n}A^T
+\left(3(Ax)^{\odot 2}\odot(Av)
+-y^{\odot 2}\odot(Av)\right)\\
+&=\frac{1}{n}A^T
+\left(\left(3(Ax)^{\odot 2}-y^{\odot 2}\right)
+\odot(Av)\right),
+\end{align*}
+whence $\nabla^2f(x)[v]=\frac{1}{n}A^T
+\left(\left(3(Ax)^{\odot 2}-y^{\odot 2}\right)
+\odot(Av)\right)$, for each $x,v\in \R^n$.
+Observe that, for fixed $v$, the map $x\mapsto \nabla^2f(x)[v] $ is continuous. Since $\R^n$ is finite-dimensional, this amounts to the continuity of the map $x \mapsto \nabla^2f(x)$, whence $f$ is twice continuously differentiable, according to the definition given in the course (p. 16).
+
+\section*{Question 4}
+Both methods should use the same data, initial point, and stopping
+criterion, for example:
+\[
+    \|\nabla f(x_k)\| \leq \varepsilon \|\nabla f(x_0)\|.
+\]
+Their final objective values, gradient norms, and reconstruction errors should also be compared. Iteration counts alone are insufficient:
+TR-tCG performs inner conjugate-gradient iterations, while GD may require several line-search evaluations.
+
+Timings should be measured under identical conditions, excluding data generation, plotting, and diagnostic printing, and preferably repeated (not implemented in this case).
+GD should use a reasonable step-size strategy. A run stopped by a time limit must not be reported as having converged.
+
+\section*{Question 5}
+The theoretical computations of the gradient and the Hessian of $f$ for this homework were more complex than those for homework 1. 
+In this homework, we learned to choose between a canonical and coordinate-dependent approach to the theoretical computations, depending on the presentation of the problem. 
+In fact, while the course deals with general Euclidean spaces without a preferred basis, problems that are formulated in $\R^n$ can sometimes be tackled more naturally using the standard basis. This was the case of the present homework, since the entry-wise multiplication used in the definition of $f$ relies on coordinates.  This is quite different from homework 1, where the theoretical computations were mostly coordinate-independent.\bigskip
+
+We also realized that implementation choices can strongly affect
+the observed performance. In particular, reusing the stopping tolerance from homework 1 led to premature termination with poor reconstruction, showing that a tolerance suitable for one problem may be inadequate for another.
+We were also surprised by how few outer iterations TR-tCG needed compared with gradient descent, although we learned that iteration counts alone are misleading because the methods perform different amounts of work per iteration. Another observation was that the gradient norm \(\|\nabla f(x_k)\|\) could temporarily increase while the objective \(f(x_k)\) decreased, without indicating a failure of the algorithm.
+\end{document}
+
